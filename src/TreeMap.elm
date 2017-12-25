@@ -41,36 +41,34 @@ getCoordinates row ({ width, height } as container) =
     in
         if width >= height then
             let
-                folder current ( subyoffset, accum ) =
-                    ( subyoffset + current / areaWidth
-                    , ( initialSubxoffset
-                      , subyoffset
-                      , initialSubxoffset + areaWidth
-                      , subyoffset + current / areaWidth
-                      )
-                        :: accum
+                ratios =
+                    row
+                        |> List.map (\datum -> datum / areaWidth)
+                        |> List.scanl (+) initialSubyoffset
+
+                determineBox current subyoffset =
+                    ( initialSubxoffset
+                    , subyoffset
+                    , initialSubxoffset + areaWidth
+                    , subyoffset + current / areaWidth
                     )
             in
-                row
-                    |> List.foldl folder ( initialSubyoffset, [] )
-                    |> Tuple.second
-                    |> List.reverse
+                List.map2 determineBox row ratios
         else
             let
-                folder current ( subxoffset, accum ) =
-                    ( subxoffset + current / areaHeight
-                    , ( subxoffset
-                      , initialSubyoffset
-                      , subxoffset + current / areaHeight
-                      , initialSubyoffset + areaHeight
-                      )
-                        :: accum
+                ratios =
+                    row
+                        |> List.map (\datum -> datum / areaHeight)
+                        |> List.scanl (+) initialSubxoffset
+
+                determineBox current subxoffset =
+                    ( subxoffset
+                    , initialSubyoffset
+                    , subxoffset + current / areaHeight
+                    , initialSubyoffset + areaHeight
                     )
             in
-                row
-                    |> List.foldl folder ( initialSubxoffset, [] )
-                    |> Tuple.second
-                    |> List.reverse
+                List.map2 determineBox row ratios
 
 
 {-| Once we've placed some boxes into an row we then need to identify the remaining area,
@@ -206,6 +204,4 @@ squarify data currentRow container stack =
 treemapSingledimensional : Container -> List Float -> List Coordinate
 treemapSingledimensional container data =
     squarify (normalize (container.width * container.height) data) [] container []
-        -- the same as reverse . concat
-        |>
-            List.foldl (++) []
+        |> List.foldl (++) []
