@@ -4,7 +4,7 @@ Treemaps are a method of visualizing data to communicate the relative size of so
 
 Here is an example displaying the GDP for some european countries: 
 
-<img style="max-width: 100%;" src="https://rawgit.com/folkertdev/elm-hexbin/master/docs/smallEuropeanGDP.svg" />
+<img style="max-width: 100%;" src="https://rawgit.com/folkertdev/elm-treemap/master/docs/smallEuropeanGDP.svg" />
 
 An here's the code:
 
