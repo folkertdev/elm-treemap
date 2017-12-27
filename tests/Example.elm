@@ -3,7 +3,7 @@ module Example exposing (..)
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string, float)
 import Test exposing (..)
-import TreeMap
+import Internal as TreeMap
 
 
 rawtreemap =
